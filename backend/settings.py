@@ -200,28 +200,32 @@ REST_FRAMEWORK = {
 # Cloudinary setup
 import cloudinary
 
+CLOUDINARY = os.getenv("CLOUDINARY")
+
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
-    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": CLOUDINARY["CLOUD_NAME"],
+    "API_KEY": CLOUDINARY["API_KEY"],
+    "API_SECRET": CLOUDINARY["API_SECRET"],
 }
 
 
 cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    cloud_name=CLOUDINARY["CLOUD_NAME"],
+    api_key=CLOUDINARY["API_KEY"],
+    api_secret=CLOUDINARY["API_SECRET"],
     secure=True,
 )
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # SMTP setup
+EMAIL = os.getenv("EMAIL")
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"  # Gmail SMTP server
 EMAIL_PORT = 587  # TLS Port
 EMAIL_USE_TLS = True  # Enable Transport Layer Security
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = EMAIL["HOST_USER"]
+EMAIL_HOST_PASSWORD = EMAIL["HOST_PASSWORD"]
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
