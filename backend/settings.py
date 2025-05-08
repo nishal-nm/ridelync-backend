@@ -19,7 +19,7 @@ import json
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables
-load_dotenv()
+load_dotenv("/etc/secrets/.env")
 
 # Parse the CONFIG JSON from environment variables
 # CONFIG = json.loads(os.getenv("CONFIG"))
