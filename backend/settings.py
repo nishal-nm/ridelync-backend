@@ -19,10 +19,9 @@ import json
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables
-load_dotenv("/etc/secrets/.env")
 
-# Parse the CONFIG JSON from environment variables
-# CONFIG = json.loads(os.getenv("CONFIG"))
+load_dotenv("/etc/secrets/.env")
+# load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -36,6 +35,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 # Allowed Hosts
 URLS = json.loads(os.getenv("URLS"))
+
 BACKEND_URL = URLS["BACKEND"]
 FRONTEND_URL = URLS["FRONTEND"]
 ALLOWED_HOSTS = [BACKEND_URL, FRONTEND_URL, "127.0.0.1", "localhost"]
@@ -200,7 +200,7 @@ REST_FRAMEWORK = {
 # Cloudinary setup
 import cloudinary
 
-CLOUDINARY = os.getenv("CLOUDINARY")
+CLOUDINARY = json.loads(os.getenv("CLOUDINARY"))
 
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": CLOUDINARY["CLOUD_NAME"],
@@ -219,7 +219,7 @@ cloudinary.config(
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # SMTP setup
-EMAIL = os.getenv("EMAIL")
+EMAIL = json.loads(os.getenv("EMAIL"))
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"  # Gmail SMTP server
