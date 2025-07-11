@@ -13,15 +13,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables
-
-load_dotenv("/etc/secrets/.env")
-# load_dotenv()
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -34,22 +31,22 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
 # Allowed Hosts
-URLS = json.loads(os.getenv("URLS"))
-
-BACKEND_URL = URLS["BACKEND"]
-FRONTEND_URL = URLS["FRONTEND"]
-ALLOWED_HOSTS = [BACKEND_URL, FRONTEND_URL, "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    os.getenv("URL_BACKEND"),
+    os.getenv("URL_FRONTEND"),
+    "127.0.0.1",
+    "localhost",
+]
 
 # Hosted MySQL Database Configuration
-DATABASE = json.loads(os.getenv("DATABASE"))
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": DATABASE["NAME"],
-        "USER": DATABASE["USER"],
-        "PASSWORD": DATABASE["PASSWORD"],
-        "HOST": DATABASE["HOST"],
-        "PORT": DATABASE["PORT"],
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
         "OPTIONS": {
             "charset": "utf8mb4",
         },
@@ -180,8 +177,6 @@ CORS_ALLOW_HEADERS = [
     "ngrok-skip-browser-warning",
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-
 CSRF_TRUSTED_ORIGINS = [
     "https://rideshare-wheat.vercel.app",
 ]
@@ -200,32 +195,27 @@ REST_FRAMEWORK = {
 # Cloudinary setup
 import cloudinary
 
-CLOUDINARY = json.loads(os.getenv("CLOUDINARY"))
-
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": CLOUDINARY["CLOUD_NAME"],
-    "API_KEY": CLOUDINARY["API_KEY"],
-    "API_SECRET": CLOUDINARY["API_SECRET"],
+    "CLOUD_NAME": os.getenv("CLOUDINARY_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API"),
+    "API_SECRET": os.getenv("CLOUDINARY_SECRET"),
 }
 
-
 cloudinary.config(
-    cloud_name=CLOUDINARY["CLOUD_NAME"],
-    api_key=CLOUDINARY["API_KEY"],
-    api_secret=CLOUDINARY["API_SECRET"],
+    cloud_name=os.getenv("CLOUDINARY_NAME"),
+    api_key=os.getenv("CLOUDINARY_API"),
+    api_secret=os.getenv("CLOUDINARY_SECRET"),
     secure=True,
 )
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # SMTP setup
-EMAIL = json.loads(os.getenv("EMAIL"))
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"  # Gmail SMTP server
 EMAIL_PORT = 587  # TLS Port
 EMAIL_USE_TLS = True  # Enable Transport Layer Security
-EMAIL_HOST_USER = EMAIL["HOST_USER"]
-EMAIL_HOST_PASSWORD = EMAIL["HOST_PASSWORD"]
+EMAIL_HOST_USER = os.getenv("EMAIL_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
